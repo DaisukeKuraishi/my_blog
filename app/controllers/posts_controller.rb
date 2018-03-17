@@ -4,8 +4,9 @@ class PostsController < ApplicationController
 
 
   def index
-    @posts = Post.all
-    @new_posts = Post.all
+    @q = Post.order(created_at: :desc).ransack(params[:q])
+    @posts = @q.result.page(params[:page]).per(2)
+    @new_posts = Post.find_newest_article
     @author = Author.first
   end
 
